@@ -1,10 +1,16 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-generator client {
-    provider = "prisma-client-js"
+enum OrderStatus {
+    PENDING
+    SUCCESS
+    FAILED
 }
 
 model Order {
@@ -15,8 +21,6 @@ model Order {
     status         OrderStatus
     idempotencyKey String      @unique
     createdAt      DateTime    @default(now())
-
-    outbox OutboxEvent[]
 }
 
 model OutboxEvent {
@@ -25,12 +29,4 @@ model OutboxEvent {
     payload   Json
     published Boolean  @default(false)
     createdAt DateTime @default(now())
-
-    orders Order[]
-}
-
-enum OrderStatus {
-    PENDING
-    SUCCESS
-    FAILED
 }

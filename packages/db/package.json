@@ -1,9 +1,9 @@
 {
   "name": "@pos/db",
   "version": "1.0.0",
-  "main": "index.ts",
   "private": true,
+  "main": "index.ts",
   "dependencies": {
-    "@prisma/client": "^5.0.0"
+    "@prisma/client": "^6.0.0"
   }
 }

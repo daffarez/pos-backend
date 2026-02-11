@@ -1,4 +1,1 @@
-import { PrismaClient } from "@prisma/client";
-
-export const prisma = new PrismaClient();
-export const OrderStatus = prisma.$enum.OrderStatus;
+export * from "@prisma/client";

@@ -1,20 +1,22 @@
 import { Kafka } from "kafkajs";
-import { prisma } from "@pos/db";
+import { PrismaClient } from "@pos/db";
 
-const kafka = new Kafka({ brokers: ["localhost:9092"] });
+const kafkaBroker = process.env.KAFKA_BROKER || "localhost:9092";
+const kafka = new Kafka({ brokers: [kafkaBroker] });
 const consumer = kafka.consumer({ groupId: "order-service" });
+
+const prisma = new PrismaClient();
 
 async function run() {
   await consumer.connect();
   await consumer.subscribe({ topic: "order.created", fromBeginning: true });
 
   await consumer.run({
-    eachMessage: async ({ message }: any) => {
+    eachMessage: async ({ message }) => {
       if (!message.value) return;
       const event = JSON.parse(message.value.toString());
 
       try {
-        // simulasikan kirim ke Odoo
         console.log("Sending order to Odoo:", event.orderId);
 
         await prisma.order.update({
@@ -23,7 +25,6 @@ async function run() {
         });
       } catch (err) {
         console.error("Failed to send order to Odoo:", err);
-        // tetap PENDING untuk retry
       }
     },
   });

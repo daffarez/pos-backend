@@ -1,8 +1,11 @@
-import { prisma } from "@pos/db";
+import { PrismaClient } from "@pos/db";
 import { Kafka } from "kafkajs";
 
-const kafka = new Kafka({ brokers: ["localhost:9092"] });
+const kafkaBroker = process.env.KAFKA_BROKER || "localhost:9092";
+const kafka = new Kafka({ brokers: [kafkaBroker] });
 const producer = kafka.producer();
+
+const prisma = new PrismaClient();
 
 async function run() {
   await producer.connect();
@@ -18,7 +21,6 @@ async function run() {
         topic: "order.created",
         messages: [{ value: JSON.stringify(event.payload) }],
       });
-
       await prisma.outboxEvent.update({
         where: { id: event.id },
         data: { published: true },
