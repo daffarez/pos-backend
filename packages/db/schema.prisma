@@ -1,0 +1,36 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Order {
+    id             String      @id @default(uuid())
+    outletId       String
+    total          Float
+    paymentMethod  String
+    status         OrderStatus
+    idempotencyKey String      @unique
+    createdAt      DateTime    @default(now())
+
+    outbox OutboxEvent[]
+}
+
+model OutboxEvent {
+    id        String   @id @default(uuid())
+    aggregate String
+    payload   Json
+    published Boolean  @default(false)
+    createdAt DateTime @default(now())
+
+    orders Order[]
+}
+
+enum OrderStatus {
+    PENDING
+    SUCCESS
+    FAILED
+}
