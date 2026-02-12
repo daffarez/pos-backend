@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:api": "tsx watch apps/order-api/src/server.ts",
-    "dev:publisher": "tsx watch apps/order-publisher/src/publisher.ts",
-    "dev:consumer": "tsx watch apps/order-consumer/src/consumer.ts",
+    "dev:api": "tsx watch apps/order-api/src/index.ts",
+    "dev:publisher": "tsx watch apps/order-publisher/src/index.ts",
+    "dev:consumer": "tsx watch apps/order-consumer/src/index.ts",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:publisher\" \"npm run dev:consumer\"",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"

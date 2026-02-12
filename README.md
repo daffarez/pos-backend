@@ -1,4 +1,4 @@
-# POS Backend — Order Processing with Idempotency, Outbox Pattern, and Kafka
+# POS Backend
 
 ## Overview
 
@@ -114,7 +114,14 @@ npx prisma migrate dev --schema=packages/db/schema.prisma
 npm run dev
 ```
 
-## What this project demonstrates
+## Run the Tests
+
+```
+npm run test
+npm run test:coverage
+```
+
+## What This Project Demonstrates
 
 - At‑least‑once delivery handling
 - Idempotent APIs

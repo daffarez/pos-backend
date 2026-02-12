@@ -2,7 +2,7 @@
   "name": "@pos/db",
   "version": "1.0.0",
   "private": true,
-  "main": "index.ts",
+  "main": "client.ts",
   "dependencies": {
     "@prisma/client": "^6.0.0"
   }

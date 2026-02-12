@@ -1,6 +1,6 @@
 import { vi, it, expect, describe, beforeEach } from "vitest";
 import request from "supertest";
-import { prismaMock, MockPrismaClient } from "./__mocks__/prisma";
+import { prismaMock, MockPrismaClient } from "../__mocks__/prisma";
 
 vi.mock("@pos/db", async () => {
   const actual = await vi.importActual<typeof import("@pos/db")>("@pos/db");
@@ -10,7 +10,7 @@ vi.mock("@pos/db", async () => {
   };
 });
 
-import app from "./app";
+import app from "./orders";
 
 describe("POST /orders", () => {
   beforeEach(() => {
