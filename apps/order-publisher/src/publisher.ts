@@ -1,11 +1,14 @@
-import { PrismaClient } from "@pos/db";
 import { Kafka } from "kafkajs";
-
-const kafkaBroker = process.env.KAFKA_BROKER || "localhost:9092";
-const kafka = new Kafka({ brokers: [kafkaBroker] });
-const producer = kafka.producer();
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
+const kafka = new Kafka({
+  clientId: "order-publisher",
+  brokers: [process.env.KAFKA_BROKER!],
+});
+
+const producer = kafka.producer();
 
 async function run() {
   await producer.connect();
@@ -14,17 +17,30 @@ async function run() {
     const events = await prisma.outboxEvent.findMany({
       where: { published: false },
       take: 10,
+      orderBy: { createdAt: "asc" },
     });
 
     for (const event of events) {
-      await producer.send({
-        topic: "order.created",
-        messages: [{ value: JSON.stringify(event.payload) }],
-      });
-      await prisma.outboxEvent.update({
-        where: { id: event.id },
-        data: { published: true },
-      });
+      try {
+        await producer.send({
+          topic: "order.created",
+          messages: [
+            {
+              key: event.id,
+              value: JSON.stringify(event.payload),
+            },
+          ],
+        });
+
+        await prisma.outboxEvent.update({
+          where: { id: event.id },
+          data: { published: true },
+        });
+
+        console.log("Published event:", event.id);
+      } catch (err) {
+        console.error("Publish failed, will retry", err);
+      }
     }
 
     await new Promise((r) => setTimeout(r, 1000));

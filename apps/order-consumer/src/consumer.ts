@@ -1,11 +1,14 @@
 import { Kafka } from "kafkajs";
-import { PrismaClient } from "@pos/db";
-
-const kafkaBroker = process.env.KAFKA_BROKER || "localhost:9092";
-const kafka = new Kafka({ brokers: [kafkaBroker] });
-const consumer = kafka.consumer({ groupId: "order-service" });
+import { PrismaClient, OrderStatus } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
+const kafka = new Kafka({
+  clientId: "order-consumer",
+  brokers: [process.env.KAFKA_BROKER!],
+});
+
+const consumer = kafka.consumer({ groupId: "order-service" });
 
 async function run() {
   await consumer.connect();
@@ -14,18 +17,26 @@ async function run() {
   await consumer.run({
     eachMessage: async ({ message }) => {
       if (!message.value) return;
+
       const event = JSON.parse(message.value.toString());
 
-      try {
-        console.log("Sending order to Odoo:", event.orderId);
+      console.log("KAFKA MESSAGE ARRIVED");
+      console.log("EVENT:", event);
 
-        await prisma.order.update({
-          where: { id: event.orderId },
-          data: { status: "SUCCESS" },
-        });
-      } catch (err) {
-        console.error("Failed to send order to Odoo:", err);
-      }
+      // idempotent update
+      const result = await prisma.order.updateMany({
+        where: {
+          id: event.orderId,
+          status: OrderStatus.PENDING,
+        },
+        data: {
+          status: OrderStatus.SUCCESS,
+          processedAt: new Date(),
+        },
+      });
+
+      if (result.count > 0) console.log("Order processed:", event.orderId);
+      else console.log("Duplicate event ignored:", event.orderId);
     },
   });
 }
