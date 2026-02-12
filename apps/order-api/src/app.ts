@@ -1,12 +1,11 @@
 import express from "express";
-import path from "path";
+import v1Router from "./routes/v1";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
+import path from "path";
 import * as OpenApiValidator from "express-openapi-validator";
-import ordersRouter from "./routes/orders";
 
 const app = express();
-
 app.use(express.json());
 
 const apiSpec = path.join(
@@ -16,24 +15,15 @@ const apiSpec = path.join(
 
 const swaggerDocument = YAML.load(apiSpec);
 
-app.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument, {
-    swaggerOptions: {
-      url: "/v1",
-    },
-  }),
-);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(
   OpenApiValidator.middleware({
     apiSpec,
     validateRequests: true,
-    validateResponses: true,
   }),
 );
 
-app.use("/v1", ordersRouter);
+app.use("/v1", v1Router);
 
 export default app;
