@@ -5,7 +5,7 @@ node_modules/
 **/node_modules/.prisma/
 
 # Prisma migrations
-packages/db/prisma/migrations/
+packages/db/migrations/
 
 
 # Build outputs
@@ -17,4 +17,7 @@ build/
 
 # VSCode settings
 .vscode/
+
+# Vitest coverage
+coverage/
 

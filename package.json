@@ -7,10 +7,12 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:api": "ts-node-dev --respawn apps/order-api/src/server.ts",
-    "dev:publisher": "ts-node-dev --respawn apps/order-publisher/src/publisher.ts",
-    "dev:consumer": "ts-node-dev --respawn apps/order-consumer/src/consumer.ts",
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:publisher\" \"npm run dev:consumer\""
+    "dev:api": "tsx watch apps/order-api/src/server.ts",
+    "dev:publisher": "tsx watch apps/order-publisher/src/publisher.ts",
+    "dev:consumer": "tsx watch apps/order-consumer/src/consumer.ts",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:publisher\" \"npm run dev:consumer\"",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@pos/db": "^1.0.0",
@@ -24,8 +26,12 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/supertest": "^6.0.3",
+    "@vitest/coverage-v8": "^4.0.18",
     "concurrently": "^8.2.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.0"
+    "supertest": "^7.2.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.18"
   }
 }

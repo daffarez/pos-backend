@@ -1,5 +1,5 @@
 import { Kafka } from "kafkajs";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@pos/db";
 
 const prisma = new PrismaClient();
 
