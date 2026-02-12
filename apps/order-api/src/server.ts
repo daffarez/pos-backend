@@ -1,5 +1,6 @@
 import express from "express";
 import { PrismaClient, OrderStatus } from "@prisma/client";
+import { OrderCreatedEvent } from "./order.type";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -26,7 +27,7 @@ app.post("/orders", async (req, res) => {
       },
     });
 
-    const event = {
+    const event: OrderCreatedEvent = {
       orderId: o.id,
       outletId: o.outletId,
       total: o.total,

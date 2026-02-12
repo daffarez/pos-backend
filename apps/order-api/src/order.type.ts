@@ -1,7 +1,7 @@
-export interface OrderCreatedEvent {
+export type OrderCreatedEvent = {
   orderId: string;
   outletId: string;
   total: number;
   paymentMethod: string;
-  createdAt: string;
-}
+  createdAt: number;
+};
