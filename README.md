@@ -61,6 +61,8 @@ apps/
     order-consumer/ # Kafka → 3rd party worker
 packages/
     db/ # Prisma schema and client
+    contracts/ # Swagger OpenAPI rule
+    config/ # API config
 docker-compose.yml
 ```
 
