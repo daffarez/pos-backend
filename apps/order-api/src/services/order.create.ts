@@ -1,13 +1,10 @@
-import express from "express";
+import { Request, Response } from "express";
+import { OrderCreatedEvent } from "../types/order.type";
 import { PrismaClient, OrderStatus } from "@pos/db";
-import { OrderCreatedEvent } from "./order.type";
-
-const app = express();
-app.use(express.json());
 
 const prisma = new PrismaClient();
 
-app.post("/orders", async (req, res) => {
+export const createOrder = async (req: Request, res: Response) => {
   const idempotencyKey = req.headers["idempotency-key"] as string;
   if (!idempotencyKey) return res.status(400).send("Missing Idempotency-Key");
 
@@ -48,6 +45,4 @@ app.post("/orders", async (req, res) => {
   });
 
   res.json(order);
-});
-
-export default app;
+};

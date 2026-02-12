@@ -6,10 +6,6 @@ export const handleOrderCreated = (prisma: PrismaClient) => {
 
     const event = JSON.parse(message.value.toString());
 
-    // DEBUG LOG: Cek apakah data ini sesuai dengan database
-    console.log("Mencoba update order dengan ID:", event.orderId);
-    console.log("Payload lengkap:", event);
-
     const result = await prisma.order.updateMany({
       where: {
         id: event.orderId,

@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: POS Backend API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/v1
+
+paths:
+  /orders:
+    post:
+      summary: Create order
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderRequest"
+
+      responses:
+        "200":
+          description: Order created or existing order returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
+components:
+  schemas:
+    CreateOrderRequest:
+      type: object
+      required:
+        - outletId
+        - total
+        - paymentMethod
+      properties:
+        outletId:
+          type: string
+          example: "outlet-123"
+        total:
+          type: number
+          example: 150000
+        paymentMethod:
+          type: string
+          enum: [CASH, QRIS, CARD]
+          example: "CASH"
+
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "a2756f41-0f11-427f-83ae-bd670ddf3f40"
+        outletId:
+          type: string
+          example: "outlet-123"
+        total:
+          type: number
+          example: 150000
+        paymentMethod:
+          type: string
+          enum: [CASH, QRIS, CARD]
+          example: "QRIS"
+        status:
+          type: string
+          enum: [PENDING, SUCCESS, FAILED]
+          example: "PENDING"
+        idempotencyKey:
+          type: string
+          example: "unique-key-2024-001"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-05-20T10:00:00.000Z"
+        processedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null

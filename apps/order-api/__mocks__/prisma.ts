@@ -12,7 +12,9 @@ export const prismaMock = {
     findMany: vi.fn(),
     update: vi.fn(),
   },
-  $transaction: vi.fn((cb) => cb(prismaMock)),
+  $transaction: vi.fn(async (callback) => {
+    return await callback(prismaMock);
+  }),
 } as unknown as PrismaClient;
 
 export const MockPrismaClient = vi.fn(function () {

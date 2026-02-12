@@ -75,6 +75,7 @@ docker-compose.yml
 Create a `.env` file at the project root:
 
 ```
+API_PORT=3000
 DATABASE_URL="postgresql://postgres:postgres@localhost:5433/posdb?schema=public"
 KAFKA_BROKER=localhost:9092
 ```
@@ -108,6 +109,12 @@ Run migration:
 npx prisma migrate dev --schema=packages/db/schema.prisma
 ```
 
+## Prisma Studio
+
+```
+npx prisma studio --schema=packages/db/schema.prisma
+```
+
 ## Run the Services
 
 ```
@@ -119,6 +126,11 @@ npm run dev
 ```
 npm run test
 npm run test:coverage
+```
+
+## Swagger OpenAPI
+```
+http://localhost:${PORT}/docs
 ```
 
 ## What This Project Demonstrates
