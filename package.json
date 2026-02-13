@@ -12,7 +12,10 @@
     "dev:consumer": "tsx watch apps/order-consumer/src/index.ts",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:publisher\" \"npm run dev:consumer\"",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prisma:generate": "npx prisma generate --schema=packages/db/schema.prisma",
+    "prisma:migration": "npx prisma migrate dev --schema=packages/db/schema.prisma",
+    "prisma:studio": "npx prisma studio --schema=packages/db/schema.prisma"
   },
   "dependencies": {
     "@pos/db": "^1.0.0",

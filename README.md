@@ -102,19 +102,19 @@ Generate Prisma client:
 
 ```
 npm install
-npx prisma generate --schema=packages/db/schema.prisma
+npm run prisma:generate
 ```
 
 Run migration:
 
 ```
-npx prisma migrate dev --schema=packages/db/schema.prisma
+npm run prisma:migration
 ```
 
 ## Prisma Studio
 
 ```
-npx prisma studio --schema=packages/db/schema.prisma
+npm run prisma:studio
 ```
 
 ## Run the Services
