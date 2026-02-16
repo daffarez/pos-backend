@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { OrderCreatedEvent } from "../types/order.type";
+import { OrderCreatedEvent } from "../../types/order.type";
 import { PrismaClient, OrderStatus } from "@pos/db";
 
 const prisma = new PrismaClient();

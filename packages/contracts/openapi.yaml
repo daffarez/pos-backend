@@ -4,10 +4,10 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:3000/v1
+  - url: http://localhost:3000
 
 paths:
-  /orders:
+  /v1/orders:
     post:
       summary: Create order
       parameters:
@@ -30,6 +30,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OrderResponse"
+  /v1/health:
+    get:
+      summary: Health check
+      description: Service liveness endpoint
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: order-api
+                  time:
+                    type: string
+                    format: date-time
+
 components:
   schemas:
     CreateOrderRequest:

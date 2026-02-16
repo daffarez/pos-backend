@@ -1,5 +1,5 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { prismaMock, MockPrismaClient } from "../../__mocks__/prisma";
+import { prismaMock, MockPrismaClient } from "../../../__mocks__/prisma";
 
 vi.mock("@pos/db", () => {
   return {
@@ -12,7 +12,7 @@ vi.mock("@pos/db", () => {
   };
 });
 
-import { createOrder } from "./order.create";
+import { createOrder } from "./order.controller";
 
 describe("createOrder service", () => {
   const mockReq = {
